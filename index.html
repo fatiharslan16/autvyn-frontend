@@ -10,7 +10,7 @@
   <div class="min-h-screen flex flex-col items-center justify-center px-4">
     <div class="max-w-xl w-full bg-white p-8 rounded-lg shadow-md">
       <h1 class="text-2xl font-bold mb-4 text-center">Get Your Instant VIN Report</h1>
-      <p class="text-sm text-gray-600 mb-6 text-center">Enter your VIN to view your vehicle details and get your report.</p>
+      <p class="text-sm text-gray-600 mb-6 text-center">Enter your VIN and email to get your report immediately.</p>
 
       <!-- VIN Input -->
       <input
@@ -19,15 +19,6 @@
         placeholder="Enter VIN..."
         class="w-full px-4 py-2 border rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
-      <button
-        onclick="getVehicleInfo()"
-        class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition mb-4"
-      >
-        Get Vehicle Info
-      </button>
-
-      <!-- Vehicle Info Display -->
-      <p id="vehicleInfo" class="text-blue-600 mb-6 font-medium text-center hidden"></p>
 
       <!-- Email Input -->
       <input
@@ -37,35 +28,57 @@
         class="w-full px-4 py-2 border rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
 
-      <!-- Continue to Payment Button -->
+      <!-- Vehicle Info Display -->
+      <p id="vehicleInfo" class="text-blue-600 mb-6 font-medium text-center hidden"></p>
+
+      <!-- Get Report Button -->
       <button
-        onclick="goToPayment()"
+        onclick="getReport()"
         class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
       >
-        Continue to Payment
+        Get Report
       </button>
     </div>
   </div>
 
   <script>
-    let currentVIN = "";
-
-    async function getVehicleInfo() {
+    async function getReport() {
       const vin = document.getElementById("vinInput").value.trim().toUpperCase();
+      const email = document.getElementById("emailInput").value.trim();
+
       if (!vin) {
         alert("Please enter a VIN.");
         return;
       }
 
+      if (!email) {
+        alert("Please enter your email.");
+        return;
+      }
+
       try {
+        // Step 1: Validate VIN
         const response = await fetch(`https://autovyn-backend.onrender.com/vehicle-info/${vin}`);
         const data = await response.json();
 
         if (data.success) {
-          currentVIN = vin;
           const vehicleInfo = document.getElementById("vehicleInfo");
           vehicleInfo.innerText = data.vehicle;
           vehicleInfo.classList.remove("hidden");
+
+          // Step 2: Proceed to payment
+          const paymentResponse = await fetch('https://autovyn-backend.onrender.com/create-checkout-session', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  vin: vin,
+                  email: email
+              }),
+          });
+
+          const paymentData = await paymentResponse.json();
+          window.location.href = paymentData.url;
+
         } else {
           alert("Invalid VIN or no vehicle found. Please check your VIN.");
         }
@@ -73,30 +86,6 @@
         console.error(error);
         alert('Server error. Please try again later.');
       }
-    }
-
-    function goToPayment() {
-      const email = document.getElementById("emailInput").value.trim();
-      if (!email) {
-        alert("Please enter your email.");
-        return;
-      }
-
-      fetch('https://autovyn-backend.onrender.com/create-checkout-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-              vin: currentVIN,
-              email: email
-          }),
-      })
-      .then(response => response.json())
-      .then(data => {
-          window.location.href = data.url;
-      })
-      .catch((error) => {
-          console.error('Error:', error);
-      });
     }
   </script>
 </body>
