@@ -48,6 +48,8 @@
   </div>
 
   <script>
+    let currentVIN = "";
+
     async function proceedToEmail() {
       const vin = document.getElementById("vinInput").value.trim().toUpperCase();
       if (!vin) {
@@ -60,9 +62,8 @@
         const data = await response.json();
 
         if (data.success) {
-          // Show vehicle info
-          document.getElementById("vehicleInfo").innerText =
-            `${data.year} ${data.make} ${data.model}`;
+          currentVIN = vin;
+          document.getElementById("vehicleInfo").innerText = data.vehicle;
           document.getElementById("step1").classList.add("hidden");
           document.getElementById("step2").classList.remove("hidden");
         } else {
@@ -81,8 +82,21 @@
         return;
       }
 
-      // Redirect to Stripe payment link (replace this with your real Stripe link)
-      window.location.href = "https://buy.stripe.com/dR6eXxdFVe611ZScMM";
+      fetch('https://autovyn-backend.onrender.com/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+              vin: currentVIN,
+              email: email
+          }),
+      })
+      .then(response => response.json())
+      .then(data => {
+          window.location.href = data.url;
+      })
+      .catch((error) => {
+          console.error('Error:', error);
+      });
     }
   </script>
 </body>
