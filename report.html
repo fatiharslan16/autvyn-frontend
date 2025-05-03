@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Report - Autovyn</title>
+</head>
+<body>
+    <h1>Your Vehicle Report is Ready</h1>
+    <p>You can download your report below:</p>
+
+    <a id="downloadLink" href="#" target="_blank">Download Report</a>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const vin = urlParams.get('vin');
+
+        if (vin) {
+            document.getElementById("downloadLink").href = `https://autovyn-backend.onrender.com/report/${vin}`;
+        } else {
+            document.body.innerHTML = "<p>VIN missing. Please contact support.</p>";
+        }
+    </script>
+</body>
+</html>
