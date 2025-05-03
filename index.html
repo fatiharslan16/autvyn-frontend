@@ -49,7 +49,7 @@
 
   <script>
     async function proceedToEmail() {
-      const vin = document.getElementById("vinInput").value.trim();
+      const vin = document.getElementById("vinInput").value.trim().toUpperCase();
       if (!vin) {
         alert("Please enter a VIN.");
         return;
