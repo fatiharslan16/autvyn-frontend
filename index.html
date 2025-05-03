@@ -38,10 +38,21 @@
       >
         Get Report
       </button>
+
+      <!-- Success Message (after payment redirect) -->
+      <p id="successMessage" class="text-green-700 font-bold text-center hidden mt-4">✅ Thank you for your purchase! Check your email for the report.</p>
+
     </div>
   </div>
 
   <script>
+    let currentVIN = "";
+
+    // Check URL for success message
+    if (window.location.search.includes('status=success')) {
+      document.getElementById("successMessage").classList.remove("hidden");
+    }
+
     async function getReport() {
       const vin = document.getElementById("vinInput").value.trim().toUpperCase();
       const email = document.getElementById("emailInput").value.trim();
@@ -57,16 +68,15 @@
       }
 
       try {
-        // Step 1: Validate VIN
         const response = await fetch(`https://autovyn-backend.onrender.com/vehicle-info/${vin}`);
         const data = await response.json();
 
         if (data.success) {
+          currentVIN = vin;
           const vehicleInfo = document.getElementById("vehicleInfo");
           vehicleInfo.innerText = data.vehicle;
           vehicleInfo.classList.remove("hidden");
 
-          // Step 2: Proceed to payment
           const paymentResponse = await fetch('https://autovyn-backend.onrender.com/create-checkout-session', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
