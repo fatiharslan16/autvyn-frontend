@@ -33,7 +33,9 @@
       emailInfo.innerText = `Your report has been sent to ${email}`;
     }
 
-    if (vin) {
+    if (vin && email) {
+      downloadLink.href = `https://autovyn-backend.onrender.com/report/${vin}?email=${email}`;
+    } else if (vin) {
       downloadLink.href = `https://autovyn-backend.onrender.com/report/${vin}`;
     } else {
       document.querySelector("div").innerHTML = "<p class='text-red-500 text-center'>VIN missing. Please contact support.</p>";
