@@ -52,13 +52,16 @@
       </p>
     </div>
 
-    <!-- Contact Form (backend-powered) -->
+    <!-- Contact Form -->
     <div class="bg-white p-6 rounded-lg shadow-sm w-full max-w-2xl text-sm mb-20">
       <h3 class="text-lg font-bold mb-2 text-center">Need help with your purchase?</h3>
       <p class="text-center text-gray-600 mb-4">We'll respond in under 6 hours.</p>
 
       <form id="contactForm" class="space-y-3">
         <input type="text" id="name" placeholder="Your name"
+               class="w-full border border-gray-300 rounded px-3 py-2 text-sm" required />
+
+        <input type="email" id="userEmail" placeholder="Your email"
                class="w-full border border-gray-300 rounded px-3 py-2 text-sm" required />
 
         <input type="text" id="vin" placeholder="Vehicle VIN"
@@ -77,7 +80,6 @@
     </div>
   </div>
 
-  <!-- JS Script -->
   <script>
     let vehicleInfo = "";
 
@@ -147,11 +149,12 @@
       }
     }
 
-    // Handle contact form submission
+    // Contact form submission
     document.getElementById("contactForm").addEventListener("submit", async function (e) {
       e.preventDefault();
 
       const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("userEmail").value.trim();
       const vin = document.getElementById("vin").value.trim();
       const message = document.getElementById("message").value.trim();
       const status = document.getElementById("formStatus");
@@ -160,7 +163,7 @@
         const res = await fetch("https://autovyn-backend.onrender.com/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, vin, message })
+          body: JSON.stringify({ name, email, vin, message })
         });
 
         const result = await res.json();
