@@ -41,7 +41,7 @@
       </button>
     </div>
 
-    <!-- Value section -->
+    <!-- Why it matters -->
     <div class="text-center text-gray-800 mt-12 max-w-2xl bg-white p-8 rounded-lg shadow">
       <h3 class="text-2xl font-semibold mb-4">Why It Matters</h3>
       <p class="text-xl mb-3 font-medium">
@@ -51,6 +51,28 @@
         Autovyn helps you avoid expensive surprises with real-time reports backed by CarFax.
         Know the car’s true history — including accidents, odometer rollbacks, title status, and more.
       </p>
+    </div>
+
+    <!-- Support section -->
+    <div class="text-gray-800 mt-16 mb-20 w-full max-w-2xl bg-white p-10 rounded-xl shadow-lg">
+      <h3 class="text-2xl font-bold mb-3 text-center">Need help with your report?</h3>
+      <p class="text-center text-gray-600 mb-6">We guarantee a response in less than 6 hours.</p>
+
+      <form action="https://formspree.io/f/mnqepqlz" method="POST" class="space-y-5">
+        <input type="text" name="name" placeholder="Your name"
+               class="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg" required />
+
+        <input type="text" name="vin" placeholder="Vehicle VIN (if available)"
+               class="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg" required />
+
+        <textarea name="message" placeholder="Describe your issue or question"
+                  rows="5" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg" required></textarea>
+
+        <button type="submit"
+                class="w-full bg-blue-600 text-white py-3 text-lg rounded hover:bg-blue-700 transition">
+          Submit Request
+        </button>
+      </form>
     </div>
   </div>
 
