@@ -1,54 +1,181 @@
-<!-- Contact Form (backend-powered) -->
-<div class="bg-white p-6 rounded-lg shadow-sm w-full max-w-2xl text-sm mb-20">
-  <h3 class="text-lg font-bold mb-2 text-center">Need help with your purchase?</h3>
-  <p class="text-center text-gray-600 mb-4">We'll respond in under 6 hours.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Autovyn | Instant CarFax Report</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
 
-  <form id="contactForm" class="space-y-3">
-    <input type="text" id="name" placeholder="Your name"
-           class="w-full border border-gray-300 rounded px-3 py-2 text-sm" required />
+  <div class="min-h-screen flex flex-col items-center px-6 pt-10">
 
-    <input type="text" id="vin" placeholder="Vehicle VIN"
-           class="w-full border border-gray-300 rounded px-3 py-2 text-sm" required />
+    <!-- CTA Banner -->
+    <div class="bg-blue-600 text-white p-8 rounded-lg text-center shadow-md mb-10 max-w-2xl w-full">
+      <h1 class="text-4xl font-extrabold mb-2">
+        Instant <span class="bg-white text-black px-3 py-1 rounded">CarFax</span> Report
+      </h1>
+      <p class="text-xl">Only $3.99 – Know before you buy.</p>
+    </div>
 
-    <textarea id="message" placeholder="Your message"
-              rows="3" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" required></textarea>
+    <!-- VIN Form -->
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-2xl text-lg mb-6">
+      <h2 class="text-3xl font-bold mb-5 text-center">Check Your Vehicle Instantly</h2>
+      <p class="text-center text-lg text-gray-600 font-medium mb-6">
+        Avoid odometer fraud, hidden repairs, and title issues before they cost you.
+      </p>
 
-    <button type="submit"
-            class="w-full bg-blue-600 text-white py-2 text-sm rounded hover:bg-blue-700 transition">
-      Submit Request
-    </button>
-  </form>
+      <input type="text" id="vinInput" maxlength="17"
+             placeholder="Enter 17-digit VIN"
+             class="w-full px-5 py-4 border border-gray-300 rounded-lg mb-4 text-lg" />
 
-  <p id="formStatus" class="text-center mt-4 text-sm text-green-600 hidden">Your message was sent!</p>
-</div>
+      <p id="vehicleInfo" class="text-blue-600 mb-4 font-semibold hidden text-center"></p>
 
-<script>
-  document.getElementById("contactForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
+      <input type="email" id="emailInput"
+             placeholder="Enter your email to receive your report"
+             class="w-full px-5 py-4 border border-gray-300 rounded-lg mb-5 text-lg hidden" />
 
-    const name = document.getElementById("name").value.trim();
-    const vin = document.getElementById("vin").value.trim();
-    const message = document.getElementById("message").value.trim();
-    const status = document.getElementById("formStatus");
+      <button id="getReportButton" onclick="proceedToPayment()"
+              class="w-full bg-blue-600 text-white py-4 text-xl rounded-lg hover:bg-blue-700 transition">
+        Get My Report
+      </button>
+    </div>
 
-    try {
-      const res = await fetch("https://autovyn-backend.onrender.com/contact", {
+    <!-- Why You Need a Vehicle Report -->
+    <div class="bg-white p-6 rounded-lg shadow text-center max-w-2xl w-full mb-6">
+      <h3 class="text-2xl font-semibold mb-2">Why You Need a Vehicle Report</h3>
+      <p class="text-base text-gray-700 font-medium mb-2">
+        You're spending thousands on a car — <span class="font-bold">$3.99</span> for peace of mind is worth it.
+      </p>
+      <p class="text-sm text-gray-600">
+        Autovyn helps you avoid costly surprises by revealing accident history, title problems, mileage rollbacks, and more — powered by CarFax.
+      </p>
+    </div>
+
+    <!-- Contact Form (backend-powered) -->
+    <div class="bg-white p-6 rounded-lg shadow-sm w-full max-w-2xl text-sm mb-20">
+      <h3 class="text-lg font-bold mb-2 text-center">Need help with your purchase?</h3>
+      <p class="text-center text-gray-600 mb-4">We'll respond in under 6 hours.</p>
+
+      <form id="contactForm" class="space-y-3">
+        <input type="text" id="name" placeholder="Your name"
+               class="w-full border border-gray-300 rounded px-3 py-2 text-sm" required />
+
+        <input type="text" id="vin" placeholder="Vehicle VIN"
+               class="w-full border border-gray-300 rounded px-3 py-2 text-sm" required />
+
+        <textarea id="message" placeholder="Your message"
+                  rows="3" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" required></textarea>
+
+        <button type="submit"
+                class="w-full bg-blue-600 text-white py-2 text-sm rounded hover:bg-blue-700 transition">
+          Submit Request
+        </button>
+      </form>
+
+      <p id="formStatus" class="text-center mt-4 text-sm text-green-600 hidden">Your message was sent!</p>
+    </div>
+  </div>
+
+  <!-- JS Script -->
+  <script>
+    let vehicleInfo = "";
+
+    document.getElementById("vinInput").addEventListener("input", () => {
+      vehicleInfo = "";
+      document.getElementById("vehicleInfo").classList.add("hidden");
+      document.getElementById("emailInput").classList.add("hidden");
+      document.getElementById("getReportButton").innerText = "Get My Report";
+    });
+
+    async function proceedToPayment() {
+      const vin = document.getElementById("vinInput").value.trim().toUpperCase();
+      const emailInput = document.getElementById("emailInput");
+      const vehicleInfoElement = document.getElementById("vehicleInfo");
+      const button = document.getElementById("getReportButton");
+
+      if (vin.length !== 17) {
+        alert("Please enter a valid 17-digit VIN.");
+        return;
+      }
+
+      if (!vehicleInfo) {
+        try {
+          button.innerText = "Checking VIN...";
+          const response = await fetch(`https://autovyn-backend.onrender.com/vehicle-info/${vin}`);
+          const data = await response.json();
+
+          if (data.success) {
+            vehicleInfo = data.vehicle;
+            vehicleInfoElement.innerText = `✅ Found Vehicle: ${vehicleInfo}`;
+            vehicleInfoElement.classList.remove("hidden");
+            emailInput.classList.remove("hidden");
+            button.innerText = "Continue";
+          } else {
+            vehicleInfoElement.innerText = "We couldn’t find that VIN. Please make sure it’s a valid 17-digit number and try again.";
+            vehicleInfoElement.classList.remove("hidden");
+            button.innerText = "Try Again";
+          }
+        } catch (err) {
+          alert("Server error. Please try again later.");
+          console.error(err);
+          button.innerText = "Get My Report";
+        }
+        return;
+      }
+
+      const email = emailInput.value.trim();
+      if (!email) {
+        alert("Please enter your email.");
+        return;
+      }
+
+      button.innerText = "Almost there...";
+
+      const response = await fetch("https://autovyn-backend.onrender.com/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, vin, message })
+        body: JSON.stringify({ vin, email, vehicle: vehicleInfo }),
       });
 
-      const result = await res.json();
-      if (result.success) {
-        status.innerText = "Your message was sent!";
-        status.classList.remove("hidden");
-        e.target.reset();
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
       } else {
-        alert("Something went wrong. Please try again.");
+        alert("Error creating payment session.");
+        button.innerText = "Try Again";
       }
-    } catch (err) {
-      console.error(err);
-      alert("Could not send your message. Please try again later.");
     }
-  });
-</script>
+
+    // Handle contact form submission
+    document.getElementById("contactForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const vin = document.getElementById("vin").value.trim();
+      const message = document.getElementById("message").value.trim();
+      const status = document.getElementById("formStatus");
+
+      try {
+        const res = await fetch("https://autovyn-backend.onrender.com/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, vin, message })
+        });
+
+        const result = await res.json();
+        if (result.success) {
+          status.innerText = "Your message was sent!";
+          status.classList.remove("hidden");
+          e.target.reset();
+        } else {
+          alert("Something went wrong. Please try again.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Could not send your message. Please try again later.");
+      }
+    });
+  </script>
+</body>
+</html>
