@@ -8,21 +8,22 @@
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans">
 
+  <!-- Hero Section -->
   <div class="min-h-screen flex flex-col items-center px-6 pt-12">
 
     <!-- CTA Box -->
-    <div class="bg-blue-600 text-white p-8 rounded-lg text-center shadow-lg mb-10 max-w-2xl w-full">
+    <div class="bg-blue-600 text-white p-8 rounded-lg text-center shadow-lg mb-12 max-w-2xl w-full">
       <h1 class="text-4xl font-extrabold mb-3">
         Instant <span class="bg-white text-black px-3 py-1 rounded">CarFax</span> Report
       </h1>
-      <p class="text-xl">Only $3.99 – Know before you buy.</p>
+      <p class="text-xl font-medium">Only $3.99 – Know before you buy.</p>
     </div>
 
     <!-- VIN Form Card -->
-    <div class="bg-white p-10 rounded-xl shadow-2xl w-full max-w-2xl text-lg">
-      <h2 class="text-3xl font-semibold mb-6 text-center">Check Your Vehicle Instantly</h2>
-      <p class="text-center text-gray-500 mb-8">
-        Avoid odometer fraud, hidden repairs, and title issues.
+    <div class="bg-white p-10 rounded-xl shadow-2xl w-full max-w-2xl text-lg mb-20">
+      <h2 class="text-3xl font-bold mb-4 text-center text-gray-800">Check Your Vehicle Instantly</h2>
+      <p class="text-center text-lg text-gray-600 font-medium mb-8">
+        Avoid odometer fraud, hidden repairs, and title issues before they cost you.
       </p>
 
       <input type="text" id="vinInput" maxlength="17"
@@ -40,41 +41,32 @@
         Get My Report
       </button>
     </div>
-
-    <!-- Why it matters -->
-    <div class="text-center text-gray-800 mt-12 max-w-2xl bg-white p-8 rounded-lg shadow">
-      <h3 class="text-2xl font-semibold mb-4">Why It Matters</h3>
-      <p class="text-xl mb-3 font-medium">
-        You're spending thousands on a car — $3.99 for peace of mind is worth it.
-      </p>
-      <p class="text-gray-600 text-md leading-relaxed">
-        Autovyn helps you avoid expensive surprises with real-time reports backed by CarFax.
-        Know the car’s true history — including accidents, odometer rollbacks, title status, and more.
-      </p>
-    </div>
-
-    <!-- Support section -->
-    <div class="text-gray-800 mt-16 mb-20 w-full max-w-2xl bg-white p-10 rounded-xl shadow-lg">
-      <h3 class="text-2xl font-bold mb-3 text-center">Need help with your report?</h3>
-      <p class="text-center text-gray-600 mb-6">We guarantee a response in less than 6 hours.</p>
-
-      <form action="https://formspree.io/f/mnqepqlz" method="POST" class="space-y-5">
-        <input type="text" name="name" placeholder="Your name"
-               class="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg" required />
-
-        <input type="text" name="vin" placeholder="Vehicle VIN (if available)"
-               class="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg" required />
-
-        <textarea name="message" placeholder="Describe your issue or question"
-                  rows="5" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg" required></textarea>
-
-        <button type="submit"
-                class="w-full bg-blue-600 text-white py-3 text-lg rounded hover:bg-blue-700 transition">
-          Submit Request
-        </button>
-      </form>
-    </div>
   </div>
+
+  <!-- Support / Help Section -->
+  <footer class="bg-white border-t border-gray-200 py-12 px-6">
+    <div class="max-w-2xl mx-auto text-center mb-6">
+      <h3 class="text-2xl font-bold mb-2">Need help with your report?</h3>
+      <p class="text-gray-600 text-base mb-1">Having issues with your purchase or didn’t receive your report?</p>
+      <p class="text-sm text-gray-500">We guarantee a response in less than 6 hours.</p>
+    </div>
+
+    <form action="https://formspree.io/f/mnqepqlz" method="POST" class="max-w-xl mx-auto space-y-5">
+      <input type="text" name="name" placeholder="Your name"
+             class="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg" required />
+
+      <input type="text" name="vin" placeholder="Vehicle VIN (if available)"
+             class="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg" required />
+
+      <textarea name="message" placeholder="Describe your issue or question"
+                rows="5" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg" required></textarea>
+
+      <button type="submit"
+              class="w-full bg-blue-600 text-white py-3 text-lg rounded hover:bg-blue-700 transition">
+        Submit Request
+      </button>
+    </form>
+  </footer>
 
   <script>
     let vehicleInfo = "";
