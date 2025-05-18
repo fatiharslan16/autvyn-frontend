@@ -14,14 +14,18 @@
       <p id="emailInfo" class="text-gray-600 mb-4 text-lg font-semibold"></p>
       <p class="text-gray-600 mb-6">Click below to view or download your report (PDF format).</p>
 
-      <a id="downloadLink" href="#" target="_blank" class="w-full block bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition text-lg font-medium">
+      <a id="downloadLink" href="#" target="_blank"
+         class="w-full block bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition text-lg font-medium">
         Download PDF Report
       </a>
 
       <hr class="my-6" />
 
       <p class="text-gray-700">Need another CarFax report?</p>
-      <a href="https://autovyn.net" class="text-blue-600 hover:underline text-lg font-semibold mt-2 inline-block">Go to Autovyn.net</a>
+      <a href="https://autovyn.net"
+         class="text-blue-600 hover:underline text-lg font-semibold mt-2 inline-block">
+        Go to Autovyn.net
+      </a>
     </div>
   </div>
 
@@ -38,10 +42,13 @@
       emailInfo.innerText = `Your report has been sent to ${email}`;
     }
 
-    if (carfaxLink) {
+    if (carfaxLink && carfaxLink.startsWith("http")) {
       downloadLink.href = `${carfaxLink}/pdf`;
     } else {
-      document.querySelector(".text-center").innerHTML = "<p class='text-red-500 text-lg font-semibold'>Report link missing. Please contact support.</p>";
+      document.querySelector(".text-center").innerHTML = `
+        <p class='text-red-500 text-lg font-semibold mb-4'>❌ Report link is missing.</p>
+        <p class='text-gray-600'>Please check your email or <a href="mailto:autovynsupport@autovyn.net" class="text-blue-600 underline'>contact support</a>.</p>
+      `;
     }
   </script>
 </body>
