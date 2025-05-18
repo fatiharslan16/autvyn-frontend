@@ -12,11 +12,11 @@
       <h1 class="text-2xl font-bold mb-4">Your Vehicle Report is Ready</h1>
 
       <p id="emailInfo" class="text-gray-600 mb-4 text-lg font-semibold"></p>
-      <p class="text-gray-600 mb-6">Click below to view or download your report (PDF format).</p>
+      <p class="text-gray-600 mb-6">Click below to view or download your report.</p>
 
       <a id="downloadLink" href="#" target="_blank"
          class="w-full block bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition text-lg font-medium">
-        Download PDF Report
+        Download Report
       </a>
 
       <hr class="my-6" />
@@ -30,62 +30,21 @@
   </div>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const email = urlParams.get('email');
-    const vin = urlParams.get('vin');
-
-    const emailInfo = document.getElementById("emailInfo");
-    const downloadLink = document.getElementById("downloadLink");
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get('email');
+    const pdfLink = params.get('link');
 
     if (email) {
-      emailInfo.innerText = `Your report has been sent to ${email}`;
+      document.getElementById("emailInfo").innerText = `Your report has been sent to ${email}`;
     }
 
-    async function fetchPDFLink(vin) {
-      try {
-        const response = await fetch(`https://connect.carsimulcast.com/getrecord/carfax/${vin}`, {
-          headers: {
-            "API-KEY": "YOUR_API_KEY",
-            "API-SECRET": "YOUR_API_SECRET"
-          }
-        });
-
-        const base64 = await response.text();
-        if (!base64 || typeof base64 !== 'string') {
-          throw new Error("Base64 missing.");
-        }
-
-        const pdfResponse = await fetch("https://connect.carsimulcast.com/pdf", {
-          method: "POST",
-          headers: {
-            "API-KEY": "YOUR_API_KEY",
-            "API-SECRET": "YOUR_API_SECRET"
-          },
-          body: new URLSearchParams({
-            base64_content: base64,
-            report_type: "carfax",
-            vehicle_name: "Your Vehicle",
-            vin
-          })
-        });
-
-        const pdfData = await pdfResponse.json();
-        if (pdfData?.pdf_link) {
-          downloadLink.href = pdfData.pdf_link;
-        } else {
-          throw new Error("PDF link not returned.");
-        }
-      } catch (err) {
-        console.error("Error fetching report:", err);
-        document.querySelector(".text-center").innerHTML = `
-          <p class='text-red-500 text-lg font-semibold mb-4'>❌ Unable to fetch your report.</p>
-          <p class='text-gray-600'>Please check your email or <a href="mailto:autovynsupport@autovyn.net" class="text-blue-600 underline'>contact support</a>.</p>
-        `;
-      }
-    }
-
-    if (vin) {
-      fetchPDFLink(vin);
+    if (pdfLink && pdfLink.startsWith("http")) {
+      document.getElementById("downloadLink").href = decodeURIComponent(pdfLink);
+    } else {
+      document.querySelector(".text-center").innerHTML = `
+        <p class='text-red-500 text-lg font-semibold mb-4'>❌ Report link missing or invalid.</p>
+        <p class='text-gray-600'>Please check your email or <a href="mailto:autovynsupport@autovyn.net" class="text-blue-600 underline'>contact support</a>.</p>
+      `;
     }
   </script>
 </body>
