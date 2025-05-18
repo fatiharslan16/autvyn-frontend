@@ -27,9 +27,8 @@
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const vin = urlParams.get('vin');
     const email = urlParams.get('email');
-    const carfaxLink = urlParams.get('link'); // ✅ Use "link" not "carfax"
+    const carfaxLink = urlParams.get('carfax');
 
     const emailInfo = document.getElementById("emailInfo");
     const downloadLink = document.getElementById("downloadLink");
@@ -39,9 +38,9 @@
     }
 
     if (carfaxLink) {
-      downloadLink.href = carfaxLink;
+      downloadLink.href = `${carfaxLink}/pdf`;
     } else {
-      document.querySelector(".text-center").innerHTML = "<p class='text-red-500 text-lg font-semibold'>Report link missing. Please contact support.</p>";
+      document.querySelector(".text-center").innerHTML = "<p class='text-red-500 text-lg font-semibold'>❌ Unable to fetch your report.<br>Please check your email or contact support.</p>";
     }
   </script>
 </body>
