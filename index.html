@@ -137,7 +137,7 @@
             emailInput.classList.remove("hidden");
             button.innerText = "Continue";
           } else {
-            vehicleInfoElement.innerText = "We couldn’t find that VIN. Please make sure it’s a valid 17-digit number and try again.";
+            vehicleInfoElement.innerText = "We couldn’t find that VIN.";
             vehicleInfoElement.classList.remove("hidden");
             button.innerText = "Try Again";
           }
@@ -175,6 +175,7 @@
     async function getVINFromPlate() {
       const plate = document.getElementById("plateInput").value.trim().toUpperCase();
       const state = document.getElementById("stateInput").value.trim().toUpperCase();
+      const vehicleInfoElement = document.getElementById("vehicleInfo");
 
       if (!plate || state.length !== 2) {
         alert("Enter valid plate number and 2-letter state code.");
@@ -182,24 +183,37 @@
       }
 
       try {
-        const response = await fetch(`https://autovyn-backend.onrender.com/plate-to-vin/${state}/${plate}`);
-        const data = await response.json();
+        const plateRes = await fetch(`https://autovyn-backend.onrender.com/plate-to-vin/${state}/${plate}`);
+        const plateData = await plateRes.json();
 
-        if (data.success && data.vin) {
-          document.getElementById("vinInput").value = data.vin;
-          document.getElementById("vinInput").dispatchEvent(new Event("input"));
-          document.getElementById("vinTab").click(); // switch to VIN tab
+        if (!plateData.success || !plateData.vin) {
+          alert("No VIN found for that plate and state.");
+          return;
+        }
+
+        const vin = plateData.vin;
+        document.getElementById("vinInput").value = vin;
+
+        const vehicleRes = await fetch(`https://autovyn-backend.onrender.com/vehicle-info/${vin}`);
+        const vehicleData = await vehicleRes.json();
+
+        if (vehicleData.success && vehicleData.vehicle) {
+          vehicleInfo = vehicleData.vehicle;
+          vehicleInfoElement.innerText = `✅ Found Vehicle: ${vehicleInfo}`;
+          vehicleInfoElement.classList.remove("hidden");
+          document.getElementById("emailInput").classList.remove("hidden");
+          document.getElementById("getReportButton").innerText = "Continue";
+          document.getElementById("vinTab").click();
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
-          alert("No VIN found for that plate and state.");
+          alert("VIN found, but vehicle info not available.");
         }
       } catch (err) {
         console.error(err);
-        alert("Error fetching VIN from plate.");
+        alert("Error fetching VIN or vehicle info.");
       }
     }
 
-    // Toggle form tabs
     document.getElementById("vinTab").addEventListener("click", () => {
       document.getElementById("vinSection").classList.remove("hidden");
       document.getElementById("plateSection").classList.add("hidden");
@@ -214,7 +228,6 @@
       document.getElementById("vinTab").classList.remove("bg-blue-100", "text-blue-600", "border-blue-600");
     });
 
-    // Contact form submission
     document.getElementById("contactForm").addEventListener("submit", async function (e) {
       e.preventDefault();
 
