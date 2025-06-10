@@ -18,27 +18,50 @@
       <p class="text-xl">Only $3.99 – Know before you buy.</p>
     </div>
 
-    <!-- VIN Form -->
+    <!-- VIN or Plate Form -->
     <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-2xl text-lg mb-6">
       <h2 class="text-3xl font-bold mb-5 text-center">Check Your Vehicle Instantly</h2>
       <p class="text-center text-lg text-gray-600 font-medium mb-6">
         Avoid odometer fraud, hidden repairs, and title issues before they cost you.
       </p>
 
-      <input type="text" id="vinInput" maxlength="17"
-             placeholder="Enter 17-digit VIN"
-             class="w-full px-5 py-4 border border-gray-300 rounded-lg mb-4 text-lg" />
+      <!-- Tabs -->
+      <div class="flex justify-center gap-4 mb-6">
+        <button id="vinTab" class="px-4 py-2 rounded border border-blue-600 text-blue-600 font-semibold bg-blue-100">By VIN</button>
+        <button id="plateTab" class="px-4 py-2 rounded border text-gray-600 hover:border-blue-600 hover:text-blue-600">By Plate</button>
+      </div>
 
-      <p id="vehicleInfo" class="text-blue-600 mb-4 font-semibold hidden text-center"></p>
+      <!-- VIN Section -->
+      <div id="vinSection">
+        <input type="text" id="vinInput" maxlength="17"
+               placeholder="Enter 17-digit VIN"
+               class="w-full px-5 py-4 border border-gray-300 rounded-lg mb-4 text-lg" />
 
-      <input type="email" id="emailInput"
-             placeholder="Enter your email to receive your report"
-             class="w-full px-5 py-4 border border-gray-300 rounded-lg mb-5 text-lg hidden" />
+        <p id="vehicleInfo" class="text-blue-600 mb-4 font-semibold hidden text-center"></p>
 
-      <button id="getReportButton" onclick="proceedToPayment()"
-              class="w-full bg-blue-600 text-white py-4 text-xl rounded-lg hover:bg-blue-700 transition">
-        Get My Report
-      </button>
+        <input type="email" id="emailInput"
+               placeholder="Enter your email to receive your report"
+               class="w-full px-5 py-4 border border-gray-300 rounded-lg mb-5 text-lg hidden" />
+
+        <button id="getReportButton" onclick="proceedToPayment()"
+                class="w-full bg-blue-600 text-white py-4 text-xl rounded-lg hover:bg-blue-700 transition">
+          Get My Report
+        </button>
+      </div>
+
+      <!-- Plate Section -->
+      <div id="plateSection" class="hidden">
+        <input type="text" id="plateInput" placeholder="License Plate Number"
+               class="w-full px-4 py-3 border border-gray-300 rounded mb-3"/>
+
+        <input type="text" id="stateInput" placeholder="State (e.g. TX)"
+               maxlength="2" class="w-full px-4 py-3 border border-gray-300 rounded mb-4 uppercase"/>
+
+        <button onclick="getVINFromPlate()"
+                class="w-full bg-gray-700 text-white py-3 rounded hover:bg-gray-800 transition">
+          Lookup VIN and Continue
+        </button>
+      </div>
     </div>
 
     <!-- Why You Need a Vehicle Report -->
@@ -148,6 +171,48 @@
         button.innerText = "Try Again";
       }
     }
+
+    async function getVINFromPlate() {
+      const plate = document.getElementById("plateInput").value.trim().toUpperCase();
+      const state = document.getElementById("stateInput").value.trim().toUpperCase();
+
+      if (!plate || state.length !== 2) {
+        alert("Enter valid plate number and 2-letter state code.");
+        return;
+      }
+
+      try {
+        const response = await fetch(`https://autovyn-backend.onrender.com/plate-to-vin/${state}/${plate}`);
+        const data = await response.json();
+
+        if (data.success && data.vin) {
+          document.getElementById("vinInput").value = data.vin;
+          document.getElementById("vinInput").dispatchEvent(new Event("input"));
+          document.getElementById("vinTab").click(); // switch to VIN tab
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          alert("No VIN found for that plate and state.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error fetching VIN from plate.");
+      }
+    }
+
+    // Toggle form tabs
+    document.getElementById("vinTab").addEventListener("click", () => {
+      document.getElementById("vinSection").classList.remove("hidden");
+      document.getElementById("plateSection").classList.add("hidden");
+      document.getElementById("vinTab").classList.add("bg-blue-100", "text-blue-600", "border-blue-600");
+      document.getElementById("plateTab").classList.remove("bg-blue-100", "text-blue-600", "border-blue-600");
+    });
+
+    document.getElementById("plateTab").addEventListener("click", () => {
+      document.getElementById("vinSection").classList.add("hidden");
+      document.getElementById("plateSection").classList.remove("hidden");
+      document.getElementById("plateTab").classList.add("bg-blue-100", "text-blue-600", "border-blue-600");
+      document.getElementById("vinTab").classList.remove("bg-blue-100", "text-blue-600", "border-blue-600");
+    });
 
     // Contact form submission
     document.getElementById("contactForm").addEventListener("submit", async function (e) {
