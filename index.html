@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,33 +21,40 @@
 
     <!-- VIN or Plate Form -->
     <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-2xl text-lg mb-6">
-      <h2 class="text-3xl font-bold mb-5 text-center">Check Your Vehicle Instantly</h2>
+      <h2 class="text-3xl font-bold mb-5 text-center">Get a CarFax Report Instantly!</h2>
       <p class="text-center text-lg text-gray-600 font-medium mb-6">
         Avoid odometer fraud, hidden repairs, and title issues before they cost you.
       </p>
 
       <!-- Tabs -->
       <div class="flex justify-center gap-4 mb-6">
-        <button id="vinTab" class="px-4 py-2 rounded border border-blue-600 text-blue-600 font-semibold bg-blue-100">By VIN</button>
-        <button id="plateTab" class="px-4 py-2 rounded border text-gray-600 hover:border-blue-600 hover:text-blue-600">By Plate</button>
+        <button id="vinTab" class="px-5 py-3 rounded-lg border-4 border-blue-600 text-blue-600 font-bold bg-blue-100 shadow-lg">Search by VIN</button>
+        <button id="plateTab" class="px-5 py-3 rounded-lg border-4 border-gray-400 text-gray-700 font-semibold bg-gray-100 hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50 transition">Search by License Plate</button>
       </div>
 
       <!-- VIN Section -->
       <div id="vinSection">
         <input type="text" id="vinInput" maxlength="17"
                placeholder="Enter 17-digit VIN"
-               class="w-full px-5 py-4 border border-gray-300 rounded-lg mb-4 text-lg" />
+               class="w-full px-5 py-4 border border-gray-300 rounded-lg mb-4 text-lg placeholder-gray-700 placeholder-opacity-100 placeholder-font-medium"/>
 
         <p id="vehicleInfo" class="text-blue-600 mb-4 font-semibold hidden text-center"></p>
 
         <input type="email" id="emailInput"
-               placeholder="Enter your email to receive your report"
+               placeholder="We'll email your report to this address"
                class="w-full px-5 py-4 border border-gray-300 rounded-lg mb-5 text-lg hidden" />
 
         <button id="getReportButton" onclick="proceedToPayment()"
                 class="w-full bg-blue-600 text-white py-4 text-xl rounded-lg hover:bg-blue-700 transition">
           Get My Report
         </button>
+
+        <!-- Stripe Badge and Security Text -->
+        <div class="flex items-center justify-center mt-3">
+          <img src="images/stripe-logo.png" alt="Powered by Stripe" class="h-6 mr-2">
+          <span class="text-sm text-gray-600 font-medium">Your payment is secure and encrypted</span>
+        </div>
+
       </div>
 
       <!-- Plate Section -->
