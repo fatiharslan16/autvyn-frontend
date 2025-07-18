@@ -8,13 +8,14 @@
   <title>Autovyn | Instant CarFax Report for Just $3.99</title>
 
   <!-- SEO Meta Tags -->
+  
   <meta name="title" content="Autovyn | Instant CarFax Report for Just $3.99">
   <meta name="description" content="Get an instant CarFax report by VIN or license plate for only $3.99. Know a car's history before buying — fast, affordable, and reliable.">
-  <meta name="keywords" content="CarFax, VIN Check, Vehicle History, License Plate Lookup, Cheap CarFax, Instant Car Report, Autovin, VIN check, used cars">
+  <meta name="keywords" content="CarFax, VIN Check, Vehicle History, License Plate Lookup, Cheap CarFax, Instant Car Report, Autovyn">
   <meta name="author" content="Autovyn">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/images/logo.png"> <!-- Replace with your actual path if different -->
+  <link rel="icon" type="image/png" href="/images/logo.png"> <!-- Update if your logo path differs -->
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -28,6 +29,8 @@
     gtag('config', 'G-9QVM5R4CQD');
   </script>
 </head>
+
+
 <body class="bg-gray-100 text-gray-800 font-sans">
 
   <div class="min-h-screen flex flex-col items-center px-6 pt-10">
@@ -37,7 +40,7 @@
       <h1 class="text-4xl font-extrabold mb-2">
         Instant <span class="bg-white text-black px-3 py-1 rounded">CarFax</span> Report
       </h1>
-      <p class="text-xl">Only $3.99 – Know before you buy.</p>
+      <p class="text-xl">Only <span data-price></span> – Know before you buy.</p>
     </div>
 
     <!-- VIN or Plate Form -->
@@ -93,15 +96,44 @@
       </div>
     </div>
 
+    <!-- How It Works Section -->
+    <div class="bg-white p-6 rounded-lg shadow-sm w-full max-w-2xl text-gray-800 text-base mb-10">
+    <h3 class="text-2xl font-bold text-center mb-4">How It Works</h3>
+    <ol class="list-decimal list-inside space-y-2 text-gray-700 mb-4">
+        <li>Enter your VIN or license plate + state.</li>
+        <li>Confirm the vehicle details and securely pay just <span data-price></span>.</li>
+        <li>Your official CarFax report is emailed instantly — usually within 30 seconds.</li>
+    </ol>
+
+    <div class="flex justify-center gap-6 mt-4 grayscale opacity-80">
+        <img src="/images/carfax-logo.png" alt="CarFax" class="h-6" />
+        <img src="/images/nicb-logo.png" alt="NICB" class="h-6" />
+    </div>
+    </div>
+
     <!-- Why You Need a Vehicle Report -->
     <div class="bg-white p-6 rounded-lg shadow text-center max-w-2xl w-full mb-6">
       <h3 class="text-2xl font-semibold mb-2">Why You Need a Vehicle Report</h3>
       <p class="text-base text-gray-700 font-medium mb-2">
-        You're spending thousands on a car — <span class="font-bold">$3.99</span> for peace of mind is worth it.
+        You're spending thousands on a car — <span class="font-bold"><span data-price></span></span> for peace of mind is worth it.
       </p>
       <p class="text-sm text-gray-600">
         Autovyn helps you avoid costly surprises by revealing accident history, title problems, mileage rollbacks, and more — powered by CarFax.
       </p>
+    </div>
+    
+    <!-- VINCheck Trusted Lookup Section -->
+    <div class="bg-white p-6 rounded-lg shadow-sm w-full max-w-2xl text-sm mt-6">
+    <h3 class="text-lg font-bold mb-2 text-center text-gray-800">Check for Stolen Vehicles</h3>
+    <p class="text-center text-gray-600 mb-3">
+        Want extra peace of mind? You can check if a vehicle has been reported stolen — it’s completely free and offered by a trusted nonprofit.
+    </p>
+    <div class="text-center">
+        <a href="https://www.nicb.org/vincheck" target="_blank" rel="noopener noreferrer"
+        class="inline-block bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition">
+        Check Now on NICB VINCheck
+        </a>
+    </div>
     </div>
 
     <!-- Contact Form -->
@@ -286,6 +318,17 @@
         alert("Could not send your message. Please try again later.");
       }
     });
+  
   </script>
+  <script>
+  const reportPrice = "$3.99";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("[data-price]").forEach(el => {
+      el.textContent = reportPrice;
+    });
+  });
+</script>
+
 </body>
 </html>
